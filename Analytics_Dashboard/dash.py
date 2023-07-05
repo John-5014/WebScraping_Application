@@ -4,7 +4,7 @@ import plotly.express as px
 from streamlit_option_menu import option_menu
 from numerize.numerize import numerize
 from query import *
-
+import time
 st.set_page_config(page_title = "Analytics Dashboard", page_icon = "📊",layout="wide")
 st.subheader("📈 Descriptive Analysis")
 st.markdown("##")
@@ -123,5 +123,42 @@ def graphs():
     left,right=st.columns(2)
     left.plotly_chart(fig_state,use_container_width=True)
     right.plotly_chart(fig_investment,use_container_width=True)
-Home()
-graphs()
+# Home()
+# graphs()
+
+def Progressbar():
+    st.markdown("""<style>.stProgress > div > div > div > div {background-image: linear-gradient(to right, #99ff99, #FFFF00)} </style>""",unsafe_allow_html=True)
+    target = 3000000000
+    current = df_selection["Investment"].sum()
+    percent=round((current/target * 100))
+    my_bar = st.progress(0)
+    
+    if percent > 100:
+        st.subheader("Target done!")
+    else:
+        st.write("You have: ", percent, "%", "of", (format(target,"d")), "TZS")
+        for percent_complete in range(percent):
+            time.sleep(0.1)
+            my_bar.progress(percent_complete+1,text="Target Percentage")
+
+def sideBar():
+    
+    
+    with st.sidebar:
+        selected = option_menu(
+            menu_title= "Main Menu",
+            options= ["Home","Progress"],
+            icons=["house","eye"],
+            menu_icon="cast",
+            default_index=0
+        )
+    if selected== "Home":
+        st.subheader(f"Page: {selected}")
+        Home()
+        graphs()
+        
+    if selected== "Progress":
+        st.subheader(f"Page: {selected}")
+        Progressbar()
+        graphs()
+sideBar()

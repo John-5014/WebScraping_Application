@@ -37,10 +37,42 @@ df_selection = df.query(
     
     "Region==@region & Location==@location & Construction==@construction"
 )
+
+df_selection["Investment"] = pd.to_numeric(df_selection["Investment"], errors="coerce")
 # st.dataframe(df_selection)
 
 def Home():
     with st.expander("Tabular"):
         showData= st.multiselect("Filter: ",df_selection.columns,default=[])
         st.write(df_selection[showData])
+        
+    #compute top analytics
+    total_investment = df_selection["Investment"].sum()
+    investment_mode = df_selection["Investment"].mode()
+    investement_mean = df_selection["Investment"].mean()
+    investement_median = df_selection["Investment"].median()
+    rating = df_selection["Rating"].sum()
+    
+    #converting to numeric data
+    investment_mode = pd.to_numeric(investment_mode,errors="coerce")
+    total_investment =float(total_investment)
+    
+    total1,total2,total3,total4,total5 = st.columns(5, gap='large')
+    with total1:
+        st.info('Total Investment', icon ="📌")
+        st.metric(label="sum TZS", value=f"{total_investment: .0f}")
+        
+    with total2:
+        st.info('Most frequent', icon ="📌")
+        st.metric(label="mode TZS", value=investment_mode)
+    with total3:
+        st.info('Average', icon ="📌")
+        st.metric(label="average TZS", value=f"{investement_mean: .0f}")
+    with total4:
+        st.info('Central Earnings', icon ="📌")
+        st.metric(label="median TZS", value=f"{investement_median: .0f}")
+    with total5:
+        st.info('Ratings', icon ="📌")
+        st.metric(label="Rating TZS", value= numerize(rating), help=f""" Total Rating: {rating} """)
+    st.markdown("---")
 Home()

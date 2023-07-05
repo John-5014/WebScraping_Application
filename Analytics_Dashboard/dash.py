@@ -33,3 +33,8 @@ construction = st.sidebar.multiselect(
     options = df["Construction"].unique(),
     default = df["Construction"].unique(),
 )
+df_selection = df.query(
+    
+    "Region==@region & Location==@location & Construction==@construction"
+)
+st.dataframe(df_selection)

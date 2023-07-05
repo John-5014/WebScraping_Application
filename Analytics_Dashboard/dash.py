@@ -17,7 +17,7 @@ df = pd.DataFrame(result, columns=["Policy","Expiry","Location","State","Region"
 #sidebar
 st.sidebar.image("../data/images/logo.png", caption = "Online Analytics")
 st.sidebar.header("Please filter")
-
+#instances within the columns
 region = st.sidebar.multiselect(
     "Select Region",
     options = df["Region"].unique(),
@@ -37,4 +37,10 @@ df_selection = df.query(
     
     "Region==@region & Location==@location & Construction==@construction"
 )
-st.dataframe(df_selection)
+# st.dataframe(df_selection)
+
+def Home():
+    with st.expander("Tabular"):
+        showData= st.multiselect("Filter: ",df_selection.columns,default=[])
+        st.write(df_selection[showData])
+Home()

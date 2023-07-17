@@ -7,7 +7,7 @@ conn = mysql.connector.connect(
     port = "3306",
     user = "root",
     password = "",
-    db = "mydb"
+    db = "laptop"
 )
 
 c = conn.cursor()
@@ -15,6 +15,11 @@ c = conn.cursor()
 #fetch
 
 def view_all_data():
-    c.execute('select * from insurance order by id asc')
+    c.execute('select * from laptop_data order by id asc')
     data = c.fetchall()
     return data
+
+
+
+
+
